@@ -109,7 +109,7 @@ export const ListContainer = () => {
       <Pagination
         p="lg"
         sx={{ justifyContent: "center" }}
-        total={numUsers / 10}
+        total={Math.ceil(numUsers / usersPerPage)}
         initialPage={1}
         page={activePage}
         onChange={setPage}
