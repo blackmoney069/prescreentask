@@ -130,11 +130,6 @@ export const ListContainer = () => {
           ]}
         ></Select>
       </Container>
-      <Text>Name Filer: {namefilter}</Text>
-      <Text>Email Filer: {emailFilter}</Text>
-      <Text>Subscription Filer: {subFilter}</Text>
-      <Text>Gender Filter: {gender}</Text>
-      <Text>Count Filter: {usersPerPage}</Text>
       <Table striped highlightOnHover>
         <thead>
           <tr>
