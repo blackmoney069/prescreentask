@@ -1,3 +1,4 @@
+import { ClassNames } from "@emotion/react";
 import {
   Container,
   Pagination,
@@ -62,7 +63,7 @@ export const ListContainer = () => {
         user.subscription.status.includes(subFilter)
       ) {
         list.push(
-          <tr draggable="true" key={user.id} className="draggableRows">
+          <tr draggable="true" key={user.id} className="draggableRows" >
             <td>
               {user.first_name} {user.last_name}
             </td>
@@ -106,16 +107,18 @@ export const ListContainer = () => {
   });
 
   return (
-    <Paper shadow="lg" p="md" sx={{ alignItems: "center" }}>
+    <Paper shadow="lg" p="md" sx={{ alignItems: "center"}}>
       <Container
         sx={{
           display: "flex",
+          flexDirection:"row",
+          flexFlow: "row wrap",//{md:"column",lg:"row"},
           justifyContent: "space-around",
           maxWidth: "100%",
         }}
       >
         <TextInput
-          label="Search with username"
+          label="Username"
           size="xs"
           placeholder="Search..."
           value={namefilter}
@@ -124,7 +127,7 @@ export const ListContainer = () => {
           }}
         ></TextInput>
         <TextInput
-          label="Search with EMAIL"
+          label="Email"
           size="xs"
           placeholder="Search..."
           value={emailFilter}
@@ -139,6 +142,7 @@ export const ListContainer = () => {
           onChange={(event) => setUsersPerPage(event.currentTarget.value)}
         ></TextInput>
         <Select
+        size="xs"
           label="Gender"
           placeholder="pickone"
           value={gender}
@@ -156,6 +160,7 @@ export const ListContainer = () => {
           ]}
         ></Select>
         <Select
+        size="xs"
           label="Subscription"
           placeholder="pickone"
           value={subFilter}
@@ -169,6 +174,7 @@ export const ListContainer = () => {
           ]}
         ></Select>
       </Container>
+      <Container sx={{overflow: 'auto'}}>
       <Table striped highlightOnHover>
         <thead>
           <tr>
@@ -186,6 +192,7 @@ export const ListContainer = () => {
           )}
         </tbody>
       </Table>
+      </Container>
       <Pagination
         p="lg"
         sx={{ justifyContent: "center" }}
