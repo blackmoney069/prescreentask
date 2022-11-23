@@ -1,4 +1,3 @@
-import { ClassNames } from "@emotion/react";
 import {
   Container,
   Pagination,
