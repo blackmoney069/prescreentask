@@ -1,5 +1,5 @@
 import {
-    Button,
+  Button,
   Container,
   createStyles,
   Pagination,
@@ -23,6 +23,24 @@ async function fetchData(setUser) {
   }
 }
 
+function getRowsBefore(container, y) {
+  const draggableItems = [
+    ...container.querySelectorAll(".draggableRows:not(.dragging")
+  ];
+  return draggableItems.reduce(
+    (closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if(offset<0 && offset > closest.offset){
+        return {offset:offset, element:child}
+      } else{
+        return closest
+      }
+    } ,
+    { offset: Number.NEGATIVE_INFINITY }
+  ).element;
+}
+
 export const ListContainer = () => {
   const [numUsers, setNumusers] = useState(1);
   const [activePage, setPage] = useState(1);
@@ -38,7 +56,6 @@ export const ListContainer = () => {
   const [rows, updateRows] = useState([]);
 
   useEffect(() => {
-    console.log("update");
     let list = [];
     users.map((user) => {
       if (
@@ -48,7 +65,7 @@ export const ListContainer = () => {
         user.subscription.status.includes(subFilter)
       ) {
         list.push(
-          <tr draggable="true" key={user.id}>
+          <tr draggable="true" key={user.id} className="draggableRows">
             <td>
               {user.first_name} {user.last_name}
             </td>
@@ -61,10 +78,34 @@ export const ListContainer = () => {
       }
     });
     updateRows(list);
-    console.log(list);
-    console.log(users);
     setNumusers(list.length);
   }, [namefilter, emailFilter, usersPerPage, gender, subFilter, activePage]);
+
+  const draggables = document.querySelectorAll(".draggableRows");
+  draggables.forEach((draggable) => {
+    draggable.addEventListener("dragstart", () => {
+      draggable.classList.add("dragging");
+    });
+    draggable.addEventListener("dragend", () => {
+      draggable.classList.remove("dragging");
+    });
+  });
+
+  const container = document.querySelectorAll(".listTable");
+  container.forEach((container) => {
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const afterRow = getRowsBefore(container, e.clientY);
+      const draggable = document.querySelector('.dragging')
+    //   console.log(typeof(draggable))
+    //   console.log(typeof(afterRow))
+      if(afterRow==null){
+        container.appendChild(draggable)
+      } else{
+        container.insertBefore(draggable, afterRow)
+      }
+    });
+  });
 
   return (
     <Paper shadow="lg" p="md" sx={{ alignItems: "center" }}>
@@ -140,10 +181,10 @@ export const ListContainer = () => {
             <th>Address</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="listTable">
           {rows.slice(
             usersPerPage * (activePage - 1),
-            usersPerPage * (activePage - 1) + usersPerPage
+            usersPerPage * activePage
           )}
         </tbody>
       </Table>
