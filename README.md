@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Get Supermind Webpage
+
+Please find the hosted webpage at 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

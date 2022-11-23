@@ -1,12 +1,9 @@
 import {
-  Button,
   Container,
-  createStyles,
   Pagination,
   Paper,
   Select,
   Table,
-  Text,
   TextInput,
 } from "@mantine/core";
 import axios from "axios";
@@ -79,7 +76,7 @@ export const ListContainer = () => {
     });
     updateRows(list);
     setNumusers(list.length);
-  }, [namefilter, emailFilter, usersPerPage, gender, subFilter, activePage]);
+  }, [namefilter, emailFilter, usersPerPage, gender, subFilter, activePage, users]);
 
   const draggables = document.querySelectorAll(".draggableRows");
   draggables.forEach((draggable) => {
