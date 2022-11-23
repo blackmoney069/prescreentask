@@ -25,6 +25,10 @@ export const ListContainer = () => {
   const [activePage, setPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
   const [users, setUser] = useState([]);
+  const [namefilter, setNameFilter] = useState("");
+  const [emailFilter, setEmailFilter] = useState("");
+  const [gender, setGender] = useState('')
+  const [subFilter, setSubFilter ] = useState("")
   useEffect(() => {
     fetchData(setUser);
   }, []);
@@ -44,6 +48,7 @@ export const ListContainer = () => {
     setNumusers(rows.length);
   }, [rows]);
 
+
   return (
     <Paper shadow="lg" p="md" sx={{ alignItems: "center" }}>
       <Container
@@ -57,17 +62,33 @@ export const ListContainer = () => {
           label="Search with username"
           size="xs"
           placeholder="Search..."
+          value={namefilter}
+          onChange={(event) => {
+            setNameFilter(event.currentTarget.value);
+          }}
         ></TextInput>
         <TextInput
           label="Search with EMAIL"
           size="xs"
           placeholder="Search..."
+          value={emailFilter}
+          onChange={(event) => {
+            setEmailFilter(event.currentTarget.value);
+          }}
         ></TextInput>
-        <TextInput label="Count" size="xs" value={usersPerPage} onChange={(event) => setUsersPerPage(event.currentTarget.value)}></TextInput>
+        <TextInput
+          label="Count"
+          size="xs"
+          value={usersPerPage}
+          onChange={(event) => setUsersPerPage(event.currentTarget.value)}
+        ></TextInput>
         <Select
           label="Gender"
           placeholder="pickone"
+          value={gender}
+          onChange={setGender}
           data={[
+            { value: "", label: "All" },
             { value: "Genderqueer", label: "Genderqueer" },
             { value: "Bigender", label: "Bigender" },
             { value: "Genderfluid", label: "Genderfluid" },
@@ -81,11 +102,14 @@ export const ListContainer = () => {
         <Select
           label="Subscription"
           placeholder="pickone"
+          value={subFilter}
+          onChange={setSubFilter}
           data={[
+            { value: "", label: "All" },
             { value: "Pending", label: "Pending" },
             { value: "Idle", label: "Idle" },
             { value: "Blocked", label: "Blocked" },
-            { value: "Active", label: "Active" }
+            { value: "Active", label: "Active" },
           ]}
         ></Select>
       </Container>
@@ -100,10 +124,27 @@ export const ListContainer = () => {
           </tr>
         </thead>
         <tbody>
-          {rows.slice(
-            usersPerPage * (activePage - 1),
-            usersPerPage * (activePage - 1) + usersPerPage
-          )}
+          {users
+            .map((user) => {
+              if (user.first_name.includes(namefilter) && user.email.includes(emailFilter) && user.gender.includes(gender) && user.subscription.status.includes(subFilter)) {
+                return (
+                  <tr key={user.id}>
+                    <td>
+                      {user.first_name} {user.last_name}
+                    </td>
+                    <td>{user.subscription.status}</td>
+                    <td>{user.gender}</td>
+                    <td>{user.credit_card.cc_number}</td>
+                    <td>{user.address.city}</td>
+                  </tr>
+                );
+              }
+            })
+            // .slice(
+            //   usersPerPage * (activePage - 1),
+            //   usersPerPage * (activePage - 1) + usersPerPage
+            // )}
+        }
         </tbody>
       </Table>
       <Pagination
