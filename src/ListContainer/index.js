@@ -1,9 +1,12 @@
 import {
+    Button,
   Container,
+  createStyles,
   Pagination,
   Paper,
   Select,
   Table,
+  Text,
   TextInput,
 } from "@mantine/core";
 import axios from "axios";
@@ -27,27 +30,41 @@ export const ListContainer = () => {
   const [users, setUser] = useState([]);
   const [namefilter, setNameFilter] = useState("");
   const [emailFilter, setEmailFilter] = useState("");
-  const [gender, setGender] = useState('')
-  const [subFilter, setSubFilter ] = useState("")
+  const [gender, setGender] = useState("");
+  const [subFilter, setSubFilter] = useState("");
   useEffect(() => {
     fetchData(setUser);
   }, []);
+  const [rows, updateRows] = useState([]);
 
-  const rows = users.map((user) => (
-    <tr key={user.id}>
-      <td>
-        {user.first_name} {user.last_name}
-      </td>
-      <td>{user.subscription.status}</td>
-      <td>{user.gender}</td>
-      <td>{user.credit_card.cc_number}</td>
-      <td>{user.address.city}</td>
-    </tr>
-  ));
   useEffect(() => {
-    setNumusers(rows.length);
-  }, [rows]);
-
+    console.log("update");
+    let list = [];
+    users.map((user) => {
+      if (
+        user.first_name.includes(namefilter) &&
+        user.email.includes(emailFilter) &&
+        user.gender.includes(gender) &&
+        user.subscription.status.includes(subFilter)
+      ) {
+        list.push(
+          <tr draggable="true" key={user.id}>
+            <td>
+              {user.first_name} {user.last_name}
+            </td>
+            <td>{user.subscription.status}</td>
+            <td>{user.gender}</td>
+            <td>{user.credit_card.cc_number}</td>
+            <td>{user.address.city}</td>
+          </tr>
+        );
+      }
+    });
+    updateRows(list);
+    console.log(list);
+    console.log(users);
+    setNumusers(list.length);
+  }, [namefilter, emailFilter, usersPerPage, gender, subFilter, activePage]);
 
   return (
     <Paper shadow="lg" p="md" sx={{ alignItems: "center" }}>
@@ -113,6 +130,11 @@ export const ListContainer = () => {
           ]}
         ></Select>
       </Container>
+      <Text>Name Filer: {namefilter}</Text>
+      <Text>Email Filer: {emailFilter}</Text>
+      <Text>Subscription Filer: {subFilter}</Text>
+      <Text>Gender Filter: {gender}</Text>
+      <Text>Count Filter: {usersPerPage}</Text>
       <Table striped highlightOnHover>
         <thead>
           <tr>
@@ -124,27 +146,10 @@ export const ListContainer = () => {
           </tr>
         </thead>
         <tbody>
-          {users
-            .map((user) => {
-              if (user.first_name.includes(namefilter) && user.email.includes(emailFilter) && user.gender.includes(gender) && user.subscription.status.includes(subFilter)) {
-                return (
-                  <tr key={user.id}>
-                    <td>
-                      {user.first_name} {user.last_name}
-                    </td>
-                    <td>{user.subscription.status}</td>
-                    <td>{user.gender}</td>
-                    <td>{user.credit_card.cc_number}</td>
-                    <td>{user.address.city}</td>
-                  </tr>
-                );
-              }
-            })
-            // .slice(
-            //   usersPerPage * (activePage - 1),
-            //   usersPerPage * (activePage - 1) + usersPerPage
-            // )}
-        }
+          {rows.slice(
+            usersPerPage * (activePage - 1),
+            usersPerPage * (activePage - 1) + usersPerPage
+          )}
         </tbody>
       </Table>
       <Pagination
