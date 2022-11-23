@@ -1,4 +1,4 @@
-import { Burger, Container, createStyles, Title, TypographyStylesProvider } from "@mantine/core";
+import { Burger, Container, createStyles, Title } from "@mantine/core";
 
 const useStyles=createStyles((theme)=>({
     headerClass: {
@@ -9,7 +9,7 @@ const useStyles=createStyles((theme)=>({
 }));
 
 export const Navbar = ()=>{
-    const {classes, theme, cx} = useStyles();
+    const {classes} = useStyles();
     return(
     <Container className={classes.headerClass}>
         <Title>Get Supermind</Title>

@@ -1,7 +1,6 @@
 import { AppShell, Header } from '@mantine/core';
 import './App.css';
 import { Navbar } from './Header';
-import { FetchingAPI } from './config';
 import { ListContainer } from './ListContainer';
 
 function App() {
