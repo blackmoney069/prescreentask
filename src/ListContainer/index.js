@@ -73,6 +73,7 @@ export const ListContainer = () => {
           </tr>
         );
       }
+      return null;
     });
     updateRows(list);
     setNumusers(list.length);
